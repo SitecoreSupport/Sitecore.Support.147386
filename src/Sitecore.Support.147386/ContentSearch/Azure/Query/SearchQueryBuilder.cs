@@ -19,7 +19,7 @@ namespace Sitecore.Support.ContentSearch.Azure.Query
                 return string.Format("&search={0}{1}", expression, boost != 1f ? "^" + boost : string.Empty);
             }
             //Sitecore.Support.147386 the additional quotes which surround our expression are added.
-            return string.Format("&search={0}:({1}){2}", field, Escape((string)expression), boost != 1f ? "^" + boost : string.Empty);
+            return string.Format("&search={0}:(\"{1}\"){2}", field, Escape((string)expression), boost != 1f ? "^" + boost : string.Empty);
         }
     }
 }
