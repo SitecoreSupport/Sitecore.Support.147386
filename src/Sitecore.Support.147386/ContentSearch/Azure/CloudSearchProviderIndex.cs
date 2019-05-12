@@ -6,7 +6,10 @@
     using Sitecore.ContentSearch.Maintenance;
     using Sitecore.ContentSearch.Security;
     using System.Reflection;
-    public class CloudSearchProviderIndex : Sitecore.ContentSearch.Azure.CloudSearchProviderIndex
+  using Sitecore.ContentSearch.Azure.Schema;
+  using Sitecore.ContentSearch.Azure.Http;
+
+  public class CloudSearchProviderIndex : Sitecore.ContentSearch.Azure.CloudSearchProviderIndex
     {
         private static readonly MethodInfo EnsureInitializedMethodInfo =
           typeof(Sitecore.ContentSearch.Azure.CloudSearchProviderIndex).GetMethod("EnsureInitialized",
@@ -19,7 +22,33 @@
         {
         }
 
-        public override void Initialize()
+    #region Workaround for issue 136614
+
+    public new ICloudSearchIndexSchemaBuilder SchemaBuilder
+    {
+      get { return (this as Sitecore.ContentSearch.Azure.CloudSearchProviderIndex).SchemaBuilder; }
+      set
+      {
+        var pi = typeof(Sitecore.ContentSearch.Azure.CloudSearchProviderIndex)
+            .GetProperty("SchemaBuilder", BindingFlags.Instance | BindingFlags.Public);
+        pi.SetValue(this, value);
+      }
+    }
+
+
+    public new ISearchService SearchService
+    {
+      get { return (this as Sitecore.ContentSearch.Azure.CloudSearchProviderIndex).SearchService; }
+      set
+      {
+        var pi = typeof(Sitecore.ContentSearch.Azure.CloudSearchProviderIndex)
+            .GetProperty("SearchService", BindingFlags.Instance | BindingFlags.Public);
+        pi.SetValue(this, value);
+      }
+    }
+
+    #endregion
+    public override void Initialize()
         {
             Log.Warn(string.Format("Sitecore Support: Initializing index {0}", this.Name), this);
             try
