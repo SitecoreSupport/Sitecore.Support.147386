@@ -10,7 +10,7 @@
 
     public class CloudSearchProviderIndex : Sitecore.ContentSearch.Azure.CloudSearchProviderIndex
     {
-        private readonly FieldInfo serviceCollectionClient = typeof(Sitecore.ContentSearch.Azure.CloudSearchSearchContext).GetField("serviceCollectionClient", BindingFlags.NonPublic | BindingFlags.Instance);
+        private readonly FieldInfo serviceCollectionClient = typeof(Sitecore.ContentSearch.Azure.CloudSearchProviderIndex).GetField("serviceCollectionClient", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly MethodInfo EnsureInitializedMethodInfo =
           typeof(Sitecore.ContentSearch.Azure.CloudSearchProviderIndex).GetMethod("EnsureInitialized",
             BindingFlags.Instance | BindingFlags.NonPublic);
