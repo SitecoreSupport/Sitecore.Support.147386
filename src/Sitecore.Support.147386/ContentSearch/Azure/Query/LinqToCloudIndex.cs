@@ -29,5 +29,14 @@
                 queryMapperFieldInfo.SetValue(this, new Sitecore.Support.ContentSearch.Azure.Query.CloudQueryMapper(this.Parameters));
             }
         }
+        private TResult ApplyScalarMethods<TResult, TDocument>(CloudQuery query,
+          CloudSearchResults<TDocument> processedResults, int? totalCount)
+        {
+            Type documentType = typeof(TResult).GetGenericArguments()[0];
+            var applyScalarMethodsMethod = this.GetType().BaseType.GetMethod("ApplyScalarMethods", BindingFlags.Instance | BindingFlags.NonPublic);
+            var applyScalarMethodsGenericMethod =
+              applyScalarMethodsMethod.MakeGenericMethod(new Type[] { typeof(TResult), documentType });
+            return (TResult)applyScalarMethodsGenericMethod.Invoke(this, new object[] { query, processedResults, totalCount });
+        }
     }
 }
